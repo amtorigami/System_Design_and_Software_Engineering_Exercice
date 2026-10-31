@@ -1,0 +1,68 @@
+# API Definition: Uber Core Rides
+
+## Entity Definitions
+
+### Location:
+- latitude: float
+- longitude: float
+- address: string
+
+### Passenger:
+- id: uuid
+- name: string
+- phone: string
+- email: string
+- rating: float
+
+### Driver:
+- id: uuid
+- name: string
+- phone: string
+- car: string
+- rating: float
+- status: DriverStatus
+
+### Ride:
+- id: uuid
+- passenger_id: uuid
+- driver_id: uuid
+- status: RideStatus
+- pickup: Location
+- destination: Location
+- amount: integer
+- currency: string
+- requested_at: timestamp
+- accepted_at: timestamp
+- started_at: timestamp
+- completed_at: timestamp
+
+### RideStatus (enum):
+requested -> accepted -> in_progress -> completed
+(cancelled possible tant que la course n'est pas in_progress)
+
+### DriverStatus (enum):
+offline | available | on_ride | on_ride_available
+
+### PoolRide:
+- id: uuid
+- driver_id: uuid
+- rides: Ride[]
+- dropoff_order: uuid[]
+- max_capacity: integer
+- available_seats: integer
+
+## Endpoint Definitions
+
+### Passenger API
+RequestRide(pickup: Location, destination: Location)
+  => Ride
+GetRide(id: uuid)
+  => Ride
+
+### Driver API
+AcceptRide(id: uuid)
+  => Ride
+CompleteRide(id: uuid)
+  => Ride
+ListAvailableRides(offset: integer, limit: integer)
+  => Ride[]
